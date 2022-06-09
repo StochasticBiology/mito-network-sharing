@@ -95,11 +95,13 @@ p1 = ggplot(data = comparison, aes(x = estimated, y = observed, color = factor(L
   geom_point(size=3) +
   geom_abline(slope = 1, intercept = 0) + 
   xlab("Predicted bingos") + ylab("Observed bingos") + labs(colour = "L") +
+  theme_classic() + 
   theme(axis.title.x = element_text(size=my.size.l), axis.title.y = element_text(size=my.size.l), axis.text.x = element_text(size=my.size.m), axis.text.y = element_text(size=my.size.m), legend.title = element_text(size=my.size.l), legend.text = element_text(size=my.size.m))
 p2 = ggplot(data = comparison, aes(x = threshold, y = observed, color = factor(L))) +
   geom_point(size=3) +
   geom_abline(slope = 1, intercept = 0) + 
   xlab("Predicted bingos") + ylab("Observed bingos") + labs(colour = "L") +
+  theme_classic() +
   theme(axis.title.x = element_text(size=my.size.l), axis.title.y = element_text(size=my.size.l), axis.text.x = element_text(size=my.size.m), axis.text.y = element_text(size=my.size.m), legend.title = element_text(size=my.size.l), legend.text = element_text(size=my.size.m))
 grid.arrange(p1, p2, nrow=1)
 

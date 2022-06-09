@@ -6,9 +6,10 @@ if (length(args)!=2) {
   stop("Exactly two arguments must be supplied (input file and m).n", call.=FALSE)
 }
 
+#args = c("Output/orig-1.xml-amlist.csv-0-0-rna-results-overall.txt", "0")
 input.fname = args[1];
 m = as.numeric(args[2]);
-output.fname = paste(args[1], ".results-m-", m, ".png", sep="")
+output.fname = paste(args[1], ".results.png", sep="")
 
 library(ggplot2)
 
@@ -21,7 +22,11 @@ for(cs in (3+seq(from=0,to=7)*5)) {
 
 results <- read.csv(input.fname, header=T)
 results = results[results$m==m,]
-bio.set = c(0,results$bingo.5.mean[results$expt==0])
+bio.set = rep(0,100)
+for(i in unique(results$L)) {
+  bio.set[i] = results$bingo.5.mean[results$L == i]
+}
+#bio.set = c(results$bingo.5.mean[unique(results$L)])
 
 results$relative.bingo.score = results$bingo.5.mean / bio.set[results$L]
 
@@ -32,9 +37,9 @@ borders = c(   which(all.titles=="ER")-0.5, which(all.titles=="ER")+0.5,
 	       which(all.titles=="Star")-0.5, which(all.titles=="Star")+0.5    )-1
 
 ggplot() +
-  geom_rect(data = data.frame(xmin = borders[1], xmax = borders[2], ymin = 0, ymax = Inf), aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), fill="white", alpha = 0.9) +
-  geom_rect(data = data.frame(xmin = borders[3], xmax = borders[4], ymin = 0, ymax = Inf), aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), fill="white", alpha = 0.9) +
-  geom_rect(data = data.frame(xmin = borders[5], xmax = borders[6], ymin = 0, ymax = Inf), aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), fill="white", alpha = 0.9) +
+  geom_rect(data = data.frame(xmin = borders[1], xmax = borders[2], ymin = 0, ymax = Inf), aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), fill="#EEEEEE", alpha = 0.9) +
+  geom_rect(data = data.frame(xmin = borders[3], xmax = borders[4], ymin = 0, ymax = Inf), aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), fill="#EEEEEE", alpha = 0.9) +
+  geom_rect(data = data.frame(xmin = borders[5], xmax = borders[6], ymin = 0, ymax = Inf), aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), fill="#EEEEEE", alpha = 0.9) +
   geom_rect(data = data.frame(xmin = -0.5, xmax = 0.5, ymin = 0, ymax = Inf), aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), fill="blue", alpha = 0.15) +
   geom_point(data = results, aes(x=expt, y=relative.bingo.score, group=factor(L), colour=factor(L))) +
   geom_line(data = results, aes(x=expt, y=relative.bingo.score, group=factor(L), colour=factor(L))) +
@@ -42,6 +47,7 @@ ggplot() +
   scale_y_continuous(trans='log', breaks = c(0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10)) +
   scale_x_continuous(breaks=seq(from=0,to=length(all.titles)-1), labels=all.titles) +
   xlab("Network") + ylab("Bingo score relative to bio network") + labs(colour = "L") +
+  theme_classic() +
   theme(axis.text.x = element_text(size=14, angle = 90, vjust = 0.5, hjust=1),
         axis.title.x = element_text(size=24),
         axis.title.y = element_text(size=24), axis.text.y = element_text(size=18),

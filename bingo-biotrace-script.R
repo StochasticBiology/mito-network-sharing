@@ -8,7 +8,7 @@ if (length(args)!=2) {
 
 input.fname = args[1];
 m = as.numeric(args[2]);
-output.fname = paste(args[1], ".trace-m-", m, ".png", sep="")
+output.fname = paste(args[1], ".trace.png", sep="")
 
 library(ggplot2)
 
@@ -19,7 +19,8 @@ png(output.fname, width=800,height=800)
 ggplot(data = subset, aes(x=prop.edges,y=prop.bingos,group=L)) +
   geom_point(aes(color=L)) +
   stat_smooth(aes(group=L, color=L, fill=L)) +
-  xlab("Proportion of edges used") + ylab("Bingo score") + labs(colour = "L", fill="L") +
+  xlab("Proportion of exchange events") + ylab("Bingo score") + labs(colour = "L", fill="L") +
+  theme_classic() + 
   theme(axis.title.x = element_text(size=24), axis.title.y = element_text(size=24),
         axis.text.x = element_text(size=18), axis.text.y = element_text(size=18),
         legend.title = element_text(size=24), legend.text = element_text(size=18))
